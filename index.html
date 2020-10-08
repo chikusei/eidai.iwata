@@ -1,46 +1,85 @@
-<%@page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page isELIgnored="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>ログイン</title>
+<meta charset="UTF-8">
+<title>ユーザー管理</title>
+<link rel="stylesheet" type="text/css" href="style.css">
 <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.2.1/font-awesome-animation.css"
 	type="text/css" media="all" />
-<link rel="stylesheet" type="text/css"
-	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
-<link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
-	<div class="main-contents">
-
-		<div class="error">
-			<c:if test="${ not empty errorMessages }">
-				<div class="errorMessages">
-					<ul>
-						<c:forEach items="${errorMessages}" var="message">
-							<c:out value="${message}" />
-						</c:forEach>
-					</ul>
-				</div>
-				<c:remove var="errorMessages" scope="session" />
-			</c:if>
+<body class="managementBody">
+	<c:if test="${ not empty errorMessages }">
+		<div class="errorMessages">
+			<ul>
+				<c:forEach items="${errorMessages}" var="message">
+					<c:out value="${message}" />
+				</c:forEach>
+			</ul>
 		</div>
-
-		<form action="login" method="post" id="loginForm">
-			<label for="account">ログインID</label>
-			<div class="ui input"><input name="account" id="account"  value="${inputAccount}"/></div><br><br>
-			<label for="password">パスワード</label>
-			<div class="ui input"><input name="password" type="password"id="password" /></div><br><br>
-			<button id="loginButton" type="submit"><i class="fas fa-sign-in-alt faa-tada animated-hover"></i></button>
-		</form>
-
-		<div id="loginCopy" >Copyright(c)Iwata Eidai</div>
+		<c:remove var="errorMessages" scope="session" />
+	</c:if>
+	<div id="managementHeader">
+		<a href="./"  id="homeLik"><i class="fas fa-home faa-tada animated-hover"></i></a>
+		<a href="signup" id="newLink"><i class="fas fa-user-plus faa-tada animated-hover"></i></a>
 	</div>
+	<table>
+		<tr>
+			<th>アカウント名</th>
+			<th>名前</th>
+			<th>部署</th>
+			<th>役職</th>
+			<th>状態</th>
+			<th>編集</th>
+		</tr>
+		<c:forEach items="${users}" var="user">
+			<tr>
+				<td>${user.account}</td>
+				<td>${user.name}</td>
+				<td>${user.branch}</td>
+				<td>${user.department}</td>
+				<td>
+					<c:if test="${(loginUser.id == user.id && loginUser.departmentId == 1)}">
+						<i class="fas fa-user-circle faa-horizontal animated-hover"  id="userIcon"></i>
+					</c:if>
+					<c:if test="${!(loginUser.id == user.id && loginUser.departmentId == 1)}">
+						<form action="status" method="post">
+							<c:choose>
+								<c:when test="${user.status == 0}">
+									<input type="hidden" name="status" value=1>
+									<input type="hidden" name="selectedUserId" value="${user.id}">
+									<button type="submit" id="stopButton" onclick='return confirm("アカウント停止")'>
+										<i class="fas fa-user faa-tada animated-hover"></i>
+									</button>
+								</c:when>
+								<c:otherwise>
+									<input type="hidden" name="status" value=0>
+									<input type="hidden" name="selectedUserId" value="${user.id}">
+									<button type="submit" id="startButton" onclick='return confirm("アカウント復活")'>
+										<i class="fas fa-user-slash faa-tada animated-hover"></i>
+									</button>
+								</c:otherwise>
+							</c:choose>
+						</form>
+					</c:if>
+				</td>
+				<td>
+					<form action="setting" method="get" >
+						<input type="hidden" name="selectedUserId" value="${user.id}">
+						<button type="submit" id="editButton">
+							<i class="fas fa-pen-nib faa-tada animated-hover" ></i>
+						</button>
+					</form>
+				</td>
+			</tr>
+		</c:forEach>
+	</table>
+	<div class="copyright">Copyright(c)Iwata Eidai</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="style.js"></script>
 </body>
 </html>
