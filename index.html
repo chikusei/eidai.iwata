@@ -1,85 +1,143 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page isELIgnored="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta charset="UTF-8">
-<title>ユーザー管理</title>
-<link rel="stylesheet" type="text/css" href="style.css">
-<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.2.1/font-awesome-animation.css"
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>掲示板</title>
+
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.2.1/font-awesome-animation.css"
 	type="text/css" media="all" />
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body class="managementBody">
-	<c:if test="${ not empty errorMessages }">
-		<div class="errorMessages">
-			<ul>
-				<c:forEach items="${errorMessages}" var="message">
-					<c:out value="${message}" />
-				</c:forEach>
-			</ul>
+<body>
+	<div class="main-contents">
+
+		<div class="error">
+			<c:if test="${ not empty errorMessages }">
+				<div class="errorMessages">
+					<ul>
+						<c:forEach items="${errorMessages}" var="message">
+							${message}
+						</c:forEach>
+					</ul>
+				</div>
+				<c:remove var="errorMessages" scope="session" />
+			</c:if>
 		</div>
-		<c:remove var="errorMessages" scope="session" />
-	</c:if>
-	<div id="managementHeader">
-		<a href="./"  id="homeLik"><i class="fas fa-home faa-tada animated-hover"></i></a>
-		<a href="signup" id="newLink"><i class="fas fa-user-plus faa-tada animated-hover"></i></a>
-	</div>
-	<table>
-		<tr>
-			<th>アカウント名</th>
-			<th>名前</th>
-			<th>部署</th>
-			<th>役職</th>
-			<th>状態</th>
-			<th>編集</th>
-		</tr>
-		<c:forEach items="${users}" var="user">
-			<tr>
-				<td>${user.account}</td>
-				<td>${user.name}</td>
-				<td>${user.branch}</td>
-				<td>${user.department}</td>
-				<td>
-					<c:if test="${(loginUser.id == user.id && loginUser.departmentId == 1)}">
-						<i class="fas fa-user-circle faa-horizontal animated-hover"  id="userIcon"></i>
-					</c:if>
-					<c:if test="${!(loginUser.id == user.id && loginUser.departmentId == 1)}">
-						<form action="status" method="post">
-							<c:choose>
-								<c:when test="${user.status == 0}">
-									<input type="hidden" name="status" value=1>
-									<input type="hidden" name="selectedUserId" value="${user.id}">
-									<button type="submit" id="stopButton" onclick='return confirm("アカウント停止")'>
-										<i class="fas fa-user faa-tada animated-hover"></i>
-									</button>
-								</c:when>
-								<c:otherwise>
-									<input type="hidden" name="status" value=0>
-									<input type="hidden" name="selectedUserId" value="${user.id}">
-									<button type="submit" id="startButton" onclick='return confirm("アカウント復活")'>
-										<i class="fas fa-user-slash faa-tada animated-hover"></i>
-									</button>
-								</c:otherwise>
-							</c:choose>
+
+		<div id="homeHeader">
+			<a href="message" id="messageIcon"><i class="far fa-comment-dots faa-tada animated-hover"></i></a>
+			<a href="http://localhost:8080/Todo/todo" id="todoIcon"><i class="fas fa-clipboard-list faa-tada animated-hover"></i></a>
+			<c:if test="${loginUser.branchId == 1 && loginUser.departmentId == 1 }">
+				<a href="management" class="link" id="managementIcon"><i class="fas fa-users-cog faa-tada animated-hover"></i></a>
+			</c:if>
+			<a href="logout" id="logoutIcon"><i class="fas fa-sign-out-alt faa-tada animated-hover"></i></a>
+		</div>
+
+		<form class="ui form" action="./" method="get" id="homeForm">
+			<div class="inline field">
+				<label><i class="far fa-calendar-alt" id="calendarIcon"></i></label>
+				<input type="date" name="selectedStartDate" value="${selectedStartDate}"> ～
+				<input type="date" name="selectedEndDate" value="${selectedEndDate}"><br><br>
+				<label>カテゴリ</label>
+				<input name="selectedCategory" value="${selectedCategory}">
+				<button type="submit" id="serchButton"><i class="fas fa-search faa-tada animated-hover"></i></button>
+			</div>
+		</form>
+
+		<c:forEach items="${messages}" var="message">
+			<div class="ui  text container" id="messageGroup">
+				<div class="ui segments">
+					<div class="ui red segment">
+						<div class="ui header">
+							<i class="far fa-newspaper" id="newspaperIcon"></i>
+							<div class="content" >
+								<span class="title" id="title">${message.title}</span>
+								<div class="sub header" id="subheader">
+									<span class="name">${message.name}</span><br>
+									<span class="category">${message.category}</span><br>
+									<span class="date"><fmt:formatDate value="${message.createdDate}"
+										pattern="yyyy/MM/dd HH:mm:ss" /></span>
+								</div>
+							</div>
+						</div>
+						<div class="ui divider"></div>
+						<span class="text">
+							<c:forEach var="s"
+								items="${fn:split(message.text, '
+								')}">
+								<div class="line">${s}</div>
+							</c:forEach>
+						</span> <br> <br>
+						<c:if test="${loginUser.id == message.userId}">
+							<form action="deleteMessage" method="post">
+								<input type="hidden" name="messageId" value="${message.id}">
+								<button id="messageDeleteButton" type="submit" onclick='return confirm("投稿の削除");'>
+									<i class="fas fa-trash-alt faa-vertical animated-hover"></i>
+								</button>
+							</form>
+						</c:if>
+
+						<c:forEach items="${comments}" var="comment">
+							<div class="ui centered comments">
+								<div class="comment">
+									<c:if test="${message.id == comment.messageId}">
+										<div class="ui secondary segment">
+											<a class="avatar"  style="position : relative; right : 5px; bottom:10px;"><i class="big black comments outline icon"></i></a>
+											<div class="content">
+												<span id="commentName">${comment.name}</span>
+											<div class="metadata">
+												<span class="date"><fmt:formatDate value="${comment.createdDate}"
+													pattern="yyyy/MM/dd HH:mm:ss" /></span>
+											</div>
+											<c:forEach var="s"
+												items="${fn:split(comment.text, '
+													')}">
+												<div class="text">${s}</div>
+											</c:forEach>
+											<c:if test="${loginUser.id == comment.userId}">
+												<form action="deleteComment" method="post">
+													<input type="hidden" name="commentId" value="${comment.id}"><br />
+													<button id="commentDeleteButton" type="submit" onclick='return confirm("コメントの削除");'>
+														<i class="fas fa-trash-alt faa-vertical animated-hover"></i>
+													</button>
+												</form>
+											</c:if>
+											</div>
+										</div>
+									</c:if>
+								</div>
+							</div>
+						</c:forEach>
+
+						<form action="comment" method="post" class="ui form">
+							<div class="field">
+								<label>コメント（500文字以下）</label>
+								<textarea name="comment" cols="50" rows="5"
+									style="height: 60px; width : 650px"><c:if test="${inputMessageId == message.id}">${inputText}
+								<c:remove var="inputText" scope="session" /></c:if></textarea>
+								<input type="hidden" name="messageId" value="${message.id}"> <br>
+								<button id="commentSubmit" style="submit"><i class="fas fa-share faa-tada animated-hover"></i></button>
+							</div>
 						</form>
-					</c:if>
-				</td>
-				<td>
-					<form action="setting" method="get" >
-						<input type="hidden" name="selectedUserId" value="${user.id}">
-						<button type="submit" id="editButton">
-							<i class="fas fa-pen-nib faa-tada animated-hover" ></i>
-						</button>
-					</form>
-				</td>
-			</tr>
+
+					</div>
+				</div>
+			</div><br><br>
 		</c:forEach>
-	</table>
+	</div>
 	<div class="copyright">Copyright(c)Iwata Eidai</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script type="text/javascript" src="style.js"></script>
 </body>
 </html>
