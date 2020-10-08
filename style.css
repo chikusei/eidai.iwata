@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
+/* 初期設定
+------------------------------------------------------ */
+body {
+	background: #fffafa;
+	font-family: 'Noto Sans JP', sans-serif;
+	position : relative ; top : 10px;
+}
+
+.copyright{
+	text-align: center;
+	position : relative ; top : 30px;
+}
+
+.error{
+	text-align: center;
+	color:#ff6347;
+}
+
+a:link {
+	color: #000000;
+}
+a:visited {
+	color: #000000;
+}
+a:hover {
+	color: #000000;
+}
+a:active {
+	color: #000000;
+}
+
+#botton {
+	font-size: large;
+	border: solid 2px #ffffff;
+}
+
+/* loginPage
+------------------------------------------------------ */
+#loginButton{
+	border : 0;
+	background : #fffafa;
+	font-size : 28px;
+	outline : none;
+	position : relative ; left : 110px;
+}
+
+#loginForm{
+	position : relative ; top : 150px;
+	text-align : center;
+	display:block
+}
+
+#loginCopy{
+	position : relative ; top : 250px;
+	text-align : center;
+}
+
+/* Home
+------------------------------------------------------ */
+#homeHeader {
+	font-size : 30px;
+	text-align : center;
+}
+
+#title{
+	position : relative ; top : 5px;
+}
+
+#subheader{
+	position : relative ; left : 500px;
+}
+
+#homeForm{
+	text-align : center;
+	position : relative ; top : 10px;
+}
+
+#messageIcon {
+	position : relative ; right : 10px;
+}
+
+#todoIcon {
+	position : relative ; right : 5px;
+}
+
+#managementIcon {
+	position : relative ; right : -5px;
+}
+
+#logoutIcon {
+	position : relative ; right : -10px;
+}
+
+#calendarIcon {
+	font-size : 20px;
+	position : relative ; right : 10px;
+	position : relative ; top : 3px;
+}
+
+#serchButton{
+	border : 0;
+	background : #fffafa;
+	font-size : 22px;
+	outline : none;
+}
+
+
+#messageGroup{
+	position : relative; top : 30px;
+}
+
+#newspaperIcon{
+	font-size : 35px;
+}
+
+#messageDeleteButton{
+	border : 0;
+	background : white;
+	font-size : 22px;
+	outline : none;
+	position : relative ; left : 630px;
+}
+
+#commentSubmit{
+	border : 0;
+	background : white;
+	font-size : 22px;
+	outline : none;
+	position : relative ; left : 600px;
+}
+
+#commentDeleteButton{
+	border : 0;
+	background : #f5f5f5;
+	font-size : 22px;
+	outline : none;
+	position : relative ; left : 550px;
+}
+
+#homeForm {
+	font-size: large;
+}
+
+#commentName{
+	font-size: 15px;
+	font-weight: bold;
+	color : black;
+}
+
+
+/* message
+------------------------------------------------------ */
+#messageHeader{
+	font-size : 30px;
+	position : relative ; left : 550px;
+}
+
+
+#messageSubmit{
+	border : 0;
+	background : white;
+	font-size : 28px;
+	outline : none;
+	position : relative ; left : 650px;
+}
+
+
+/*signup
+------------------------------------------------------ */
+#signupHeader{
+	font-size : 30px;
+	position : relative ; left : 330px;
+}
+
+#signupButton{
+	border : 0;
+	background : white;
+	font-size : 22px;
+	outline : none;
+	position : relative ; left : 660px;
+}
+
+
+/* management
+------------------------------------------------------ */
+.managementBody{
+	text-align : center;
+}
+
+
+#managementHeader{
+	font-size : 28px;
+}
+
+#homeLik{
+	position : relative ; right : 220px;
+}
+
+#newLink{
+	position : relative ; left : 220px;
+}
+
+
+table {
+	border-collapse: collapse;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table th {
+	padding: 10px;
+	border-bottom: solid 5px #ff6347;
+}
+
+table td {
+	padding: 10px;
+	border-bottom: solid 1px #ff6347;
+}
+
+#editButton, #startButton, #stopButton{
+	border : 0;
+	background : #fffafa;
+	font-size : 22px;
+	outline : none;
+}
+
+ #userIcon{
+	font-size : 22px;
+ }
